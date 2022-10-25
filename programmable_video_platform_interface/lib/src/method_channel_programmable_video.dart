@@ -38,12 +38,15 @@ class MethodChannelProgrammableVideo extends ProgrammableVideoPlatform {
   );
 
   Widget _videoTrackWidget(Map<String, Object> creationParams, Key key) {
+    print("[Called _videoTrackWidget][creationParams]: $creationParams");
+
     if (Platform.isAndroid) {
       return AndroidView(
         key: key,
         viewType: 'twilio_programmable_video/views',
         creationParams: creationParams,
         creationParamsCodec: const StandardMessageCodec(),
+        onPlatformViewCreated: (int inteiro) => print("criou android view"),
       );
     }
 
@@ -62,12 +65,17 @@ class MethodChannelProgrammableVideo extends ProgrammableVideoPlatform {
   //#region Functions
   /// Calls native code to create a widget displaying the LocalVideoTrack's video.
   @override
-  Widget createLocalVideoTrackWidget({bool mirror = true, Key? key}) {
+  Widget createLocalVideoTrackWidget({
+    bool mirror = true,
+    Key? key,
+    String name = '',
+  }) {
     key ??= ValueKey('Twilio_LocalParticipant');
 
     final creationParams = {
       'isLocal': true,
       'mirror': mirror,
+      'name': name,
     };
 
     return _videoTrackWidget(creationParams, key);
@@ -196,6 +204,7 @@ class MethodChannelProgrammableVideo extends ProgrammableVideoPlatform {
   /// Calls native code to create video track
   @override
   Future<void> createVideoTrack(LocalVideoTrackModel localVideoTrack) {
+    print("[MethodChannelProgrammableVideo][localVideoTrack.toMap()]: ${localVideoTrack.toMap()}");
     return _methodChannel.invokeMethod('LocalVideoTrack#create', localVideoTrack.toMap());
   }
 
