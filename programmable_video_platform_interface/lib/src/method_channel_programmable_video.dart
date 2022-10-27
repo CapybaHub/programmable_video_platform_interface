@@ -38,15 +38,12 @@ class MethodChannelProgrammableVideo extends ProgrammableVideoPlatform {
   );
 
   Widget _videoTrackWidget(Map<String, Object> creationParams, Key key) {
-    print("[Called _videoTrackWidget][creationParams]: $creationParams");
-
     if (Platform.isAndroid) {
       return AndroidView(
         key: key,
         viewType: 'twilio_programmable_video/views',
         creationParams: creationParams,
         creationParamsCodec: const StandardMessageCodec(),
-        onPlatformViewCreated: (int inteiro) => print("criou android view"),
       );
     }
 
